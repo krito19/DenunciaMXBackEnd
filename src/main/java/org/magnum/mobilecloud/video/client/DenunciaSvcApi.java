@@ -16,11 +16,11 @@ public interface DenunciaSvcApi {
 	
 	public static final String DENUNCIA_ID_SEARCH_PATH=DENUNCIA_SVC_PATH + "/search/findById";
 	
-	public static final String DENUNCIA_ID_SFP_SEARCH_PATH=DENUNCIA_SVC_PATH + "/search/findByIdSFP";
+	public static final String DENUNCIA_ID_SFP_SEARCH_PATH=DENUNCIA_SVC_PATH + "/search/findByidDenunciaSPF";
 	
 	public static final String ID_PARAMETER="id";
 	
-	public static final String ID_SPF_PARAMETER="idSPF";
+	public static final String ID_SPF_PARAMETER="idDenunciaSPF";
 	
 	@GET(DENUNCIA_SVC_PATH)
 	public Collection<Denuncia> getDenunciaList();
@@ -28,6 +28,8 @@ public interface DenunciaSvcApi {
 	@GET(DENUNCIA_ID_SEARCH_PATH)
 	public Denuncia getDenunciaByIdInterno(@Query(ID_PARAMETER)  String idInterno );
 	
+	@GET(DENUNCIA_ID_SFP_SEARCH_PATH)
+	public Denuncia getDenunciaByIdDenunciaSPF(@Query(ID_SPF_PARAMETER)  String idDenunciaSPF );
 	
 	@POST(DENUNCIA_SVC_PATH)
 	public void addDenuncia(@Body Denuncia d);

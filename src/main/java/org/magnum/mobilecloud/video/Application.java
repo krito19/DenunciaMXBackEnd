@@ -59,7 +59,7 @@ public class Application extends RepositoryRestMvcConfiguration {
     @Value("MISSING KEY!!!")
     private String amazonAWSAccessKey;
 
-    @Value("MISSING SECRET")
+    @Value("MISSING SECRET !!!")
     private String amazonAWSSecretKey;
 
     @Bean

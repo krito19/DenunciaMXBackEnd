@@ -15,4 +15,7 @@ public interface DenunciaRepository extends CrudRepository<Denuncia, String> {
 	public Denuncia findById(
 			@Param(DenunciaSvcApi.ID_PARAMETER) String id);
 	
+	public Denuncia findByIdDenunciaSPF(
+			@Param(DenunciaSvcApi.ID_SPF_PARAMETER)String idSPF);
+	
 }
