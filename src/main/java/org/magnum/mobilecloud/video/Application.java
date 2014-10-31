@@ -57,7 +57,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 	}
 	
 	
-    @Value("Access")
+    @Value("KEY")
     private String amazonAWSAccessKey;
 
     @Value("Secret")

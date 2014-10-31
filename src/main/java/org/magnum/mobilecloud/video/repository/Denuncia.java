@@ -1,5 +1,7 @@
 package org.magnum.mobilecloud.video.repository;
 
+import java.util.Collection;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMarshalling;
@@ -23,7 +25,10 @@ public class Denuncia {
 	String fechaRegistro;
 
 	Evidencia evidencia;
+	
+	Collection<Pregunta> Preguntas;
 
+	
 	@DynamoDBAttribute
 	@DynamoDBMarshalling(marshallerClass = EvidenciaMarshaller.class)
 	public Evidencia getEvidencia() {
@@ -151,6 +156,17 @@ public class Denuncia {
 	public void setUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
 	}
+	
+	@DynamoDBAttribute
+	@DynamoDBMarshalling(marshallerClass = PreguntaMarshaller.class)
+	public Collection<Pregunta> getPreguntas() {
+		return Preguntas;
+	}
+
+	public void setPreguntas(Collection<Pregunta> preguntas) {
+		Preguntas = preguntas;
+	}
+
 
 	
 }
