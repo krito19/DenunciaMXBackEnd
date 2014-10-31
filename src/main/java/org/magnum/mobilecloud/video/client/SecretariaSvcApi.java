@@ -26,6 +26,7 @@ public interface SecretariaSvcApi {
 		
 		public static final String DENUNCIA_UPDATE_STATUS_PATH=SECRETARIA_SVC_PATH+"/denuncia";
 		
+		public static final String TEST = SECRETARIA_SVC_PATH+"/test";
 		
 		
 		@POST(DENUNCIA_UPDATE_STATUS_PATH)

@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import org.magnum.mobilecloud.video.client.SecretariaSvcApi;
 import org.magnum.mobilecloud.video.repository.DenunciaHistory;
+import org.magnun.mobilecloud.notification.SNSMobilePush;
+import org.magnun.mobilecloud.notification.SampleMessageGenerator.Platform;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +48,12 @@ public class SecretariaService {
 		
 	}
 	
+	@RequestMapping(value=SecretariaSvcApi.TEST, method=RequestMethod.GET)
+	public void test()
+	{
+		SNSMobilePush push = new SNSMobilePush();
+		push.sendMessage(Platform.APNS_SANDBOX, "message");
+	}
 	/*@RequestMapping(value=SecretariaSvcApi.DENUNCIA_LIST_HISTORY_PATH,method=RequestMethod.GET)
 	public Collection<DenunciaHistory> getAllByIdDenuncia(@RequestParam(SecretariaSvcApi.DENUNCIA_ID_PARAMETER) String idDenuncia)
 	{

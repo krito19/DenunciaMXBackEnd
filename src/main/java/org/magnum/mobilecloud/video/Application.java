@@ -15,6 +15,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.sns.AmazonSNSClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //Tell Spring to automatically inject any dependencies that are marked in
@@ -57,10 +58,10 @@ public class Application extends RepositoryRestMvcConfiguration {
 	}
 	
 	
-    @Value("REPLACE_WITH_KEY")
+    @Value("REPLACE_KEY")
     private String amazonAWSAccessKey;
 
-    @Value("REPLACE_WITH_SECRET")
+    @Value("REPLACE_SECRET")
     private String amazonAWSSecretKey;
 
     @Bean
@@ -79,6 +80,13 @@ public class Application extends RepositoryRestMvcConfiguration {
     public AmazonDynamoDBClient amazonDynamoDBClient()
     {
     	return new AmazonDynamoDBClient(amazonAWSCredentials());    
+    }
+    
+    
+    @Bean 
+    AmazonSNSClient amazonSNSClient()
+    {
+    	return new AmazonSNSClient(amazonAWSCredentials());
     }
 
 }
