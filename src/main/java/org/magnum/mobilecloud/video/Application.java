@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // find any Controllers or other components that are part of our applciation.
 // Any class in this package that is annotated with @Controller is going to be
 // automatically discovered and connected to the DispatcherServlet.
-@ComponentScan
+@ComponentScan("org.magnum.mobilecloud")
 public class Application extends RepositoryRestMvcConfiguration {
 
 	//@Autowired
@@ -57,10 +57,10 @@ public class Application extends RepositoryRestMvcConfiguration {
 	}
 	
 	
-    @Value("KEY")
+    @Value("REPLACE_WITH_KEY")
     private String amazonAWSAccessKey;
 
-    @Value("Secret")
+    @Value("REPLACE_WITH_SECRET")
     private String amazonAWSSecretKey;
 
     @Bean
@@ -73,6 +73,12 @@ public class Application extends RepositoryRestMvcConfiguration {
     @Bean
     public AWSCredentials amazonAWSCredentials() {
         return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
+    }
+    
+    @Bean
+    public AmazonDynamoDBClient amazonDynamoDBClient()
+    {
+    	return new AmazonDynamoDBClient(amazonAWSCredentials());    
     }
 
 }
