@@ -56,10 +56,11 @@ public class Application extends RepositoryRestMvcConfiguration {
 		return new ResourcesMapper();
 	}
 	
-    @Value("MISSING KEY!!!")
+	
+    @Value("Access")
     private String amazonAWSAccessKey;
 
-    @Value("MISSING SECRET !!!")
+    @Value("Secret")
     private String amazonAWSSecretKey;
 
     @Bean
