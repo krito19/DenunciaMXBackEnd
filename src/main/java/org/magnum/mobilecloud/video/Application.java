@@ -79,14 +79,18 @@ public class Application extends RepositoryRestMvcConfiguration {
     @Bean
     public AmazonDynamoDBClient amazonDynamoDBClient()
     {
-    	return new AmazonDynamoDBClient(amazonAWSCredentials());    
+    	AmazonDynamoDBClient amazonDBClient = new AmazonDynamoDBClient(
+    			amazonAWSCredentials());
+    	return amazonDBClient;
     }
     
     
     @Bean 
-    AmazonSNSClient amazonSNSClient()
+    public AmazonSNSClient amazonSNSClient()
     {
-    	return new AmazonSNSClient(amazonAWSCredentials());
+    	AmazonSNSClient amazonSNSClient = new AmazonSNSClient(
+    			amazonAWSCredentials());
+    	return amazonSNSClient;
     }
 
 }

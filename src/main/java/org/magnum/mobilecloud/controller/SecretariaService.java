@@ -24,6 +24,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.sns.AmazonSNSClient;
 
 @RestController
 public class SecretariaService {
@@ -31,6 +32,10 @@ public class SecretariaService {
 	
 	@Autowired
 	AmazonDynamoDBClient client;
+	
+	@Autowired
+	AmazonSNSClient snsClient;
+	
 	
 	@RequestMapping(value=SecretariaSvcApi.DENUNCIA_UPDATE_STATUS_PATH,method=RequestMethod.POST)
 	public ResponseEntity updateDenunciaEstatus(@RequestBody DenunciaHistory d){
@@ -51,9 +56,12 @@ public class SecretariaService {
 	@RequestMapping(value=SecretariaSvcApi.TEST, method=RequestMethod.GET)
 	public void test()
 	{
-		SNSMobilePush push = new SNSMobilePush();
+		SNSMobilePush push = new SNSMobilePush(snsClient);
 		push.sendMessage(Platform.APNS_SANDBOX, "message");
 	}
+	
+	
+	
 	/*@RequestMapping(value=SecretariaSvcApi.DENUNCIA_LIST_HISTORY_PATH,method=RequestMethod.GET)
 	public Collection<DenunciaHistory> getAllByIdDenuncia(@RequestParam(SecretariaSvcApi.DENUNCIA_ID_PARAMETER) String idDenuncia)
 	{

@@ -16,12 +16,7 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 
 public class SNSMobilePush {
 	
-	
-	
 	AmazonSNSClient client;
-	
-	@Autowired
-	AWSCredentials credentials;
 	
 	private AmazonSNSClientWrapper snsClientWrapper;
 	
@@ -36,13 +31,10 @@ public class SNSMobilePush {
 		attributesMap.put(Platform.MPNS, addMPNSNotificationAttributes());*/
 	}
 	
-	public SNSMobilePush()
+	public SNSMobilePush(AmazonSNSClient client)
 	{
 		  
-		String amazonAWSAccessKey="REPLACE_KEY";
-		String amazonAWSSecretKey="REPLACE_SECRET";
-		AWSCredentials credentials =  new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
-		client = new AmazonSNSClient(credentials);
+		this.client=client;
 		client.setEndpoint("https://sns.us-west-2.amazonaws.com");
 		this.snsClientWrapper= new AmazonSNSClientWrapper(client);
 		
