@@ -1,8 +1,11 @@
 package org.magnum.mobilecloud.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 
 import org.magnum.mobilecloud.video.client.SecretariaSvcApi;
+import org.magnum.mobilecloud.video.repository.Denuncia;
 import org.magnum.mobilecloud.video.repository.DenunciaHistory;
 import org.magnun.mobilecloud.notification.SNSMobilePush;
 import org.magnun.mobilecloud.notification.SampleMessageGenerator.Platform;
@@ -36,11 +39,24 @@ public class SecretariaService {
 	@Autowired
 	AmazonSNSClient snsClient;
 	
+	public static  int DENUNCIA_RECIBIDA_SPF = 11;
+	
 	
 	@RequestMapping(value=SecretariaSvcApi.DENUNCIA_UPDATE_STATUS_PATH,method=RequestMethod.POST)
 	public ResponseEntity updateDenunciaEstatus(@RequestBody DenunciaHistory d){
+		
 		 DynamoDBMapper mapper = new DynamoDBMapper(client);
-		 mapper.save(d);
+		
+		 //Set the new estatus
+		 saveDenunciaHistory(mapper, d);
+		 
+		 //Update the denuncia
+		 Denuncia denuncia = updateDenuncia(mapper, d.getIdDenuncia(), d.getFolio(), d.getIdEstatusDenuncia());
+		 
+		 //Push Notification
+		 SNSMobilePush push = new SNSMobilePush(snsClient);
+		 push.sendMessage(Platform.APNS_SANDBOX, "message",denuncia.getToken());
+		 
 		 return new ResponseEntity(HttpStatus.CREATED);
 		
 	}
@@ -56,8 +72,7 @@ public class SecretariaService {
 	@RequestMapping(value=SecretariaSvcApi.TEST, method=RequestMethod.GET)
 	public void test()
 	{
-		SNSMobilePush push = new SNSMobilePush(snsClient);
-		push.sendMessage(Platform.APNS_SANDBOX, "message");
+		
 	}
 	
 	
@@ -67,4 +82,34 @@ public class SecretariaService {
 	{
 		return null;
 	}*/
+	
+	private void saveDenunciaHistory(DynamoDBMapper mapper, DenunciaHistory d)
+	{
+		mapper.save(d);
+	}
+	
+	private Denuncia updateDenuncia(DynamoDBMapper mapper,String idDenuncia, String folio,int estatusDenuncia)
+	{
+		Denuncia d = mapper.load(Denuncia.class, idDenuncia);
+		
+		
+		if(DENUNCIA_RECIBIDA_SPF==estatusDenuncia)
+			d.setIdDenunciaSPF(folio);
+		
+		d.setIdEstadoDenuncia(estatusDenuncia);
+		
+		mapper.save(d);
+		
+		return d;
+		
+			
+	}
+
+
+	private static String getFormatDate(String pattern, Date date) {
+		return new SimpleDateFormat(pattern).format(date);
+	}
+	
+	
+	
 }

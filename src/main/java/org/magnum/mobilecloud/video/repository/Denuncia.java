@@ -47,7 +47,9 @@ public class Denuncia {
 					 boolean isAnonima,      String mail,      	String titulo,
 				 	 int idDependencia,      int idEstadoDenuncia,String fechaRegistro,
 				 	 Evidencia evidencia,
-				 	 Ubicacion ubicacion){
+				 	 Ubicacion ubicacion,
+				 	 Collection<Pregunta> Preguntas
+				 	 ){
 		super();
 		this.id=id;
 		this.idDenunciaSPF = idDenunciaSPF;
@@ -60,6 +62,7 @@ public class Denuncia {
 	 	this.fechaRegistro=fechaRegistro;
 	 	this.evidencia=evidencia;
 	 	this.ubicacion=ubicacion;
+	 	this.Preguntas=Preguntas;
 		
 	}
 

@@ -17,34 +17,55 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 public class SNSMobilePush {
 	
 	AmazonSNSClient client;
+	String tokenDevice;
+	String idDenuncia;
+	String folio;
+	int estatusDenuncia;
+	
+	
+	private static final String APN_SANDBOX_APP_NAME="";
+	
+	
+	// This should be in pem format with \n at the end of each line.
+	private static final String APN_SANDBOX_CERTIFICATE ="";
+	
+	private static final String APN_SANDBOX_PRIVATEKEY = "";
+			
+	
+	private static final String GCM_API_KEY="";
+	private static final String GCM_APP_NAME="";
+	
+	
 	
 	private AmazonSNSClientWrapper snsClientWrapper;
 	
 	public static final Map<Platform, Map<String, MessageAttributeValue>> attributesMap = new HashMap<Platform, Map<String, MessageAttributeValue>>();
 	static {
-		attributesMap.put(Platform.ADM, null);
 		attributesMap.put(Platform.GCM, null);
 		attributesMap.put(Platform.APNS, null);
 		attributesMap.put(Platform.APNS_SANDBOX, null);
-		/*attributesMap.put(Platform.BAIDU, addBaiduNotificationAttributes());
-		attributesMap.put(Platform.WNS, addWNSNotificationAttributes());
-		attributesMap.put(Platform.MPNS, addMPNSNotificationAttributes());*/
+		
 	}
 	
 	public SNSMobilePush(AmazonSNSClient client)
 	{
-		  
 		this.client=client;
 		client.setEndpoint("https://sns.us-west-2.amazonaws.com");
 		this.snsClientWrapper= new AmazonSNSClientWrapper(client);
 		
 	}
 	
-	public void sendMessage(Platform platform,String message)
+	public void sendMessage(Platform platform,String message,String token)
 	{
 		try {
+			this.tokenDevice=token;
 		
-			demoAppleSandboxAppNotification();
+			if(platform==Platform.APNS_SANDBOX)
+				demoAppleSandboxAppNotification();
+			
+			else if(platform==Platform.GCM)
+				demoAndroidAppNotification();
+			
 		}catch (AmazonServiceException ase) {
 						System.out
 						.println("Caught an AmazonServiceException, which means your request made it "
@@ -69,24 +90,10 @@ public class SNSMobilePush {
 		// also change the notification payload as per your preferences using
 		// the method
 		// com.amazonaws.sns.samples.tools.SampleMessageGenerator.getSampleAndroidMessage()
-		String serverAPIKey = "";
-		String applicationName = "";
-		String registrationId = "";
+		String serverAPIKey = GCM_API_KEY;
+		String applicationName = GCM_APP_NAME;
+		String registrationId = tokenDevice;
 		snsClientWrapper.demoNotification(Platform.GCM, "", serverAPIKey,
-				registrationId, applicationName, attributesMap);
-	}
-
-	public void demoKindleAppNotification() {
-		// TODO: Please fill in following values for your application. You can
-		// also change the notification payload as per your preferences using
-		// the method
-		// com.amazonaws.sns.samples.tools.SampleMessageGenerator.getSampleKindleMessage()
-		String clientId = "";
-		String clientSecret = "";
-		String applicationName = "";
-
-		String registrationId = "";
-		snsClientWrapper.demoNotification(Platform.ADM, clientId, clientSecret,
 				registrationId, applicationName, attributesMap);
 	}
 
@@ -100,7 +107,7 @@ public class SNSMobilePush {
 		String privateKey = ""; // This should be in pem format with \n at the
 								// end of each line.
 		String applicationName = "";
-		String deviceToken = ""; // This is 64 hex characters.
+		String deviceToken = tokenDevice; // This is 64 hex characters.
 		snsClientWrapper.demoNotification(Platform.APNS, certificate,
 				privateKey, deviceToken, applicationName, attributesMap);
 	}
@@ -110,13 +117,13 @@ public class SNSMobilePush {
 		// also change the notification payload as per your preferences using
 		// the method
 		// com.amazonaws.sns.samples.tools.SampleMessageGenerator.getSampleAppleMessage()
-		String certificate = ""; // This should be in pem format with \n at the
+		String certificate = APN_SANDBOX_CERTIFICATE; // This should be in pem format with \n at the
 									// end of each line.
-		String privateKey = ""; 
+		String privateKey = APN_SANDBOX_PRIVATEKEY; 
 		
 		// This should be in pem format with \n at the end of each line.
-		String applicationName = "";
-		String deviceToken = ""; // This is 64 hex characters.
+		String applicationName = APN_SANDBOX_APP_NAME;
+		String deviceToken = tokenDevice; // This is 64 hex characters.
 		snsClientWrapper.demoNotification(Platform.APNS_SANDBOX, certificate,
 				privateKey, deviceToken, applicationName, attributesMap);
 	}
