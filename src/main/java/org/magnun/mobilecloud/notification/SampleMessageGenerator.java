@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jndi.url.dns.dnsURLContext;
 
 public class SampleMessageGenerator {
 	
@@ -42,34 +43,37 @@ public class SampleMessageGenerator {
 		}
 	}
 
-	private static Map<String, String> getData() {
+	private static Map<String, String> getData(Denuncia d) {
 		Map<String, String> payload = new HashMap<String, String>();
 		payload.put("message", "Hello World!");
+		payload.put("id", d.getId());
+		payload.put("idStatus",String.valueOf(d.getId_status()));
+		payload.put("id", d.getMensaje());
 		return payload;
 	}
 
-	public static String getSampleAppleMessage() {
+	public static String getSampleAppleMessage(Denuncia d) {
 		Map<String, Object> appleMessageMap = new HashMap<String, Object>();
 		Map<String, Object> appMessageMap = new HashMap<String, Object>();
-		appMessageMap.put("alert", "Carolina me avisas si te llego por favor gracias.");
-		appMessageMap.put("badge", 9);
-		appMessageMap.put("sound", "default");
+		appMessageMap.put("alert", d.getMensaje());
+		appleMessageMap.put("denuncia", d);
+		appMessageMap.put("sound", "chime.aiff");
 		appleMessageMap.put("aps", appMessageMap);
 		return jsonify(appleMessageMap);
 	}
 
 	public static String getSampleKindleMessage() {
 		Map<String, Object> kindleMessageMap = new HashMap<String, Object>();
-		kindleMessageMap.put("data", getData());
+		//kindleMessageMap.put("data", getData());
 		kindleMessageMap.put("consolidationKey", "Welcome");
 		kindleMessageMap.put("expiresAfter", 1000);
 		return jsonify(kindleMessageMap);
 	}
 
-	public static String getSampleAndroidMessage() {
+	public static String getSampleAndroidMessage(Denuncia d) {
 		Map<String, Object> androidMessageMap = new HashMap<String, Object>();
 		androidMessageMap.put("collapse_key", "Welcome");
-		androidMessageMap.put("data", getData());
+		androidMessageMap.put("data", getData(d));
 		androidMessageMap.put("delay_while_idle", true);
 		androidMessageMap.put("time_to_live", 125);
 		androidMessageMap.put("dry_run", false);

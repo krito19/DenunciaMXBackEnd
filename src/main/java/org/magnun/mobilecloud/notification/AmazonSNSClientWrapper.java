@@ -22,9 +22,13 @@ public class AmazonSNSClientWrapper {
 	
 
 	private final AmazonSNS snsClient;
+	
+	private final Denuncia d;
 
-	public AmazonSNSClientWrapper(AmazonSNS client) {
+	public AmazonSNSClientWrapper(AmazonSNS client, Denuncia d) {
 		this.snsClient = client;
+		this.d=d;
+		
 	}
 
 	private CreatePlatformApplicationResult createPlatformApplication(
@@ -159,11 +163,11 @@ public class AmazonSNSClientWrapper {
 	private String getPlatformSampleMessage(Platform platform) {
 		switch (platform) {
 		case APNS:
-			return SampleMessageGenerator.getSampleAppleMessage();
+			return SampleMessageGenerator.getSampleAppleMessage(d);
 		case APNS_SANDBOX:
-			return SampleMessageGenerator.getSampleAppleMessage();
+			return SampleMessageGenerator.getSampleAppleMessage(d);
 		case GCM:
-			return SampleMessageGenerator.getSampleAndroidMessage();
+			return SampleMessageGenerator.getSampleAndroidMessage(d);
 		case ADM:
 			return SampleMessageGenerator.getSampleKindleMessage();
 		case BAIDU:

@@ -26,11 +26,13 @@ public class SNSMobilePush {
 	private static final String APN_SANDBOX_APP_NAME="";
 	
 	
-	// This should be in pem format with \n at the end of each line.
+	// This should be in pem format with |\n at the end of each line.
 	private static final String APN_SANDBOX_CERTIFICATE ="";
+			   
+
+	private static final String APN_SANDBOX_PRIVATEKEY =""; 
+			 
 	
-	private static final String APN_SANDBOX_PRIVATEKEY = "";
-			
 	
 	private static final String GCM_API_KEY="";
 	private static final String GCM_APP_NAME="";
@@ -47,11 +49,11 @@ public class SNSMobilePush {
 		
 	}
 	
-	public SNSMobilePush(AmazonSNSClient client)
+	public SNSMobilePush(AmazonSNSClient client,Denuncia d)
 	{
 		this.client=client;
 		client.setEndpoint("https://sns.us-west-2.amazonaws.com");
-		this.snsClientWrapper= new AmazonSNSClientWrapper(client);
+		this.snsClientWrapper= new AmazonSNSClientWrapper(client,d);
 		
 	}
 	

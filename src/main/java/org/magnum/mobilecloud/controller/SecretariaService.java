@@ -7,24 +7,18 @@ import java.util.Date;
 import org.magnum.mobilecloud.video.client.SecretariaSvcApi;
 import org.magnum.mobilecloud.video.repository.Denuncia;
 import org.magnum.mobilecloud.video.repository.DenunciaHistory;
+import org.magnum.mobilecloud.video.repository.Dispositivo;
 import org.magnun.mobilecloud.notification.SNSMobilePush;
 import org.magnun.mobilecloud.notification.SampleMessageGenerator.Platform;
-import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import retrofit.http.Body;
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.sns.AmazonSNSClient;
@@ -54,13 +48,33 @@ public class SecretariaService {
 		 Denuncia denuncia = updateDenuncia(mapper, d.getIdDenuncia(), d.getFolio(), d.getIdEstatusDenuncia());
 		 
 		 //Push Notification
-		 SNSMobilePush push = new SNSMobilePush(snsClient);
-		 push.sendMessage(Platform.APNS_SANDBOX, "message",denuncia.getToken());
+		 pushNotification( d.getIdDenuncia(),d.getFolio(),d.getMensaje(),d.getIdEstatusDenuncia(),denuncia.getToken(),mapper);
 		 
 		 return new ResponseEntity(HttpStatus.CREATED);
 		
 	}
 	
+
+	private void pushNotification(String idDenuncia, String folio,
+			String mensaje, int idEstatusDenuncia, String token,DynamoDBMapper mapper) {
+
+		//We need to know if is IOS, Android or whatever
+		Platform p = getDevicePlatform(mapper, token);
+		
+		if(null==p)
+			return;
+		
+		//Build a DenunciaNotification
+		org.magnun.mobilecloud.notification.Denuncia d = 
+				new org.magnun.mobilecloud.notification.Denuncia(idDenuncia, idEstatusDenuncia, mensaje);
+		
+		
+		//Push the message
+		SNSMobilePush sns = new SNSMobilePush(snsClient,d);
+		
+		sns.sendMessage(p, mensaje,token);
+	}
+
 
 	@RequestMapping(value=SecretariaSvcApi.DENUNCIA_LIST_HISTORY_PATH,method=RequestMethod.GET)
 	public Collection<DenunciaHistory> getAllByFolio(@RequestParam(SecretariaSvcApi.FOLIO_PARAMETER) String folio)
@@ -104,8 +118,29 @@ public class SecretariaService {
 		
 			
 	}
+	
+	private Platform getDevicePlatform(DynamoDBMapper mapper,String token)
+	{
+		Dispositivo d = mapper.load(Dispositivo.class, token);
+		if(null==d)
+			return null;
+		
+		
+		
+		if(d.getOs()==1)
+			return Platform.APNS_SANDBOX;
+		if(d.getOs()==2)
+			return Platform.GCM;
+		
+		//Just for testing 
+		return Platform.APNS_SANDBOX;
+			//return null;
+		
+	}
 
-
+	
+	
+	
 	private static String getFormatDate(String pattern, Date date) {
 		return new SimpleDateFormat(pattern).format(date);
 	}
