@@ -6,4 +6,4 @@ DenunciaMX es una aplicación para iOS y Android dirigida al los ciudadanos mexi
 Este demo esta enfocado para dispositivos con iOS 7 o superior y pantalla de 4 pulgadas (iphone 5, 5s, 5c). Para dispositivos Android se recomienda utilizar 2.3.6 en adelante. Se realizo nativamente en Objetive-C y Java. Utiliza frameworks de Google, MapKit y Amazon para trabajar. Para poder correr el proyecto se deberá clonar el repositorio y agregar las claves de Amazon descritas en el documento proporcionado.
 
 En el siguiente link, se encontra el documento detallado del manual, video y descripción:
-<a>https://docs.google.com/presentation/d/1_X-6nbwWrKXME3Fc7_vnXB0jjfLj7PoCKTiCX_oBAf4/edit?usp=sharing</a>
+<a target="_blank">https://docs.google.com/presentation/d/1_X-6nbwWrKXME3Fc7_vnXB0jjfLj7PoCKTiCX_oBAf4/edit?usp=sharing</a>
